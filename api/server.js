@@ -5,17 +5,15 @@ const cors = require('cors');
 const { connectToDb } = require('./db.js');
 const { installHandler } = require('./api_handler');
 
-
-const port = process.env.API_SERVER_PORT || 3000;
-
 const app = express();
 
 installHandler(app);
 
+const port = process.env.API_SERVER_PORT || 3000;
 
 (async function start() {
   try {
-    //app.use(cors());
+    app.use(cors());
     await connectToDb();
     app.listen(port, () => {
       console.log(`API started on port ${port}`);

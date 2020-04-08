@@ -16,7 +16,6 @@ export default class ProductList extends React.Component {
       this.loadData();
     }
   
-    
     async loadData() {
       const query = `query {
         productList {

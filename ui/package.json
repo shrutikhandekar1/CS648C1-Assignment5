@@ -4,6 +4,7 @@
   "description": "Pro MERN Stack (2nd Edition) - UI",
   "main": "index.js",
   "scripts": {
+    "#start": "UI server. HMR is enabled in dev mode.",
     "start": "nodemon -w uiserver.js -w .env uiserver.js",
     "lint": "eslint . --ext js,jsx --ignore-pattern public",
     "compile": "webpack --mode production",
@@ -43,6 +44,8 @@
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.19.0",
     "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-middleware": "^3.7.2",
+    "webpack-hot-middleware": "^2.25.0"
   }
 }

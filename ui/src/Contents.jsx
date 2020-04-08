@@ -1,8 +1,10 @@
 import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
-import IssueList from './IssueList.jsx';
-import IssueReport from './IssueReport.jsx';
+import ProductList from './ProductList.jsx';
+import ProductReport from './ProductReport.jsx';
+import ProductEdit from './ProductEdit.jsx';
+import ProductImage from './ProductImage.jsx';
 
 const NotFound = () => <h1>Page Not Found</h1>;
 
@@ -10,8 +12,10 @@ export default function Contents() {
   return (
     <Switch>
       <Redirect exact from="/" to="/products" />
-      <Route path="/products" component={ProductsList} />
-      <Route path="/addProduct" component={AddProduct} />
+      <Route path="/products" component={ProductList} />
+      <Route path="/edit/:id" component={ProductEdit} />
+      <Route path="/image/:id" component={ProductImage} />
+      <Route path="/report" component={ProductReport} />
       <Route component={NotFound} />
     </Switch>
   );

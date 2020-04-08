@@ -15,6 +15,7 @@ enum Inventory {
 }
 type Query {
   productList: [Product!]!
+  product(id: Int!): Product!
 }
 type Mutation {
     productAdd(product: ProductInput!): Product!

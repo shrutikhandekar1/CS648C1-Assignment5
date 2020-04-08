@@ -20,8 +20,7 @@ async function connectToDb() {
     return result.value.current;
   }
 
-  function getDb() {
-    return db;
+  function getDb(){
+      return db;
   }
-
   module.exports = { connectToDb, getNextSequence, getDb };
