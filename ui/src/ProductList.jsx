@@ -1,9 +1,11 @@
   
 import React from 'react';
+import { Route } from 'react-router-dom';
 
 import ProductTable from './ProductTable.jsx';
 import ProductAdd from './ProductAdd.jsx';
 import graphQLFetch from './graphQLFetch.js';
+import ProductDetail from './ProductDetail.jsx';
 
 export default class ProductList extends React.Component {
     constructor() {
@@ -15,8 +17,7 @@ export default class ProductList extends React.Component {
     componentDidMount() {
       this.loadData();
     }
-  
-    
+
     async loadData() {
       const query = `query {
         productList {
@@ -45,7 +46,10 @@ export default class ProductList extends React.Component {
     }
   
     render() {
+      console.log("Product List")
       const { products } = this.state;
+      const { match } = this.props;
+      console.log("{`${match.path}/:id`}");
       return (
         <React.Fragment>
           <h1>My Company Inventory</h1>
@@ -55,6 +59,8 @@ export default class ProductList extends React.Component {
           <h3>Add a new product to the inventory</h3>
           <hr />
           <ProductAdd createProduct={this.createProduct} />
+          <hr />
+          <Route path={`${match.path}/:id`} component={ProductDetail} />
         </React.Fragment>
         
       );

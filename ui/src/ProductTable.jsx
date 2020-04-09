@@ -28,7 +28,7 @@ export default function ProductTable({ productList }) {
   
   const ProductRow = withRouter(({ product, location: { search } }) => {
     const selectLocation = { pathname: `/productList/${product.id}`, search };
-    console.log(typeof product.id);
+    console.log("ProductTable", typeof product.id);
     return (
       <tr>
         <td>{product.productName}</td>
