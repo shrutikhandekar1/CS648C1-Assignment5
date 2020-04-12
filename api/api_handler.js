@@ -10,6 +10,8 @@ const resolvers = {
     },
     Mutation: {
       productAdd: product.add,
+      productUpdate: product.update,
+      productDelete: product.delete,
     },
   };
 

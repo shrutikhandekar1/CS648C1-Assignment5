@@ -12,6 +12,7 @@ export default class ProductList extends React.Component {
       super();
       this.state = { products: [] };
       this.createProduct = this.createProduct.bind(this);
+      this.deleteProduct = this.deleteProduct.bind(this);
     }
   
     componentDidMount() {
@@ -45,17 +46,38 @@ export default class ProductList extends React.Component {
       }
     }
   
+    async deleteProduct(index) {
+      const query = `mutation productDelete($id: Int!) {
+        productDelete(id: $id)
+      }`;
+      const { products } = this.state;
+      const { location: { pathname, search }, history } = this.props;
+      const { id } = products[index];
+      const data = await graphQLFetch(query, { id });
+      if (data && data.productDelete) {
+        this.setState((prevState) => {
+          const newList = [...prevState.products];
+          if (pathname === `/products/${id}`) {
+            history.push({ pathname: '/products', search });
+          }
+          newList.splice(index, 1);
+          return { products: newList };
+        });
+      } else {
+        this.loadData();
+      }
+    }
+
     render() {
-      console.log("Product List")
       const { products } = this.state;
       const { match } = this.props;
-      console.log("{`${match.path}/:id`}");
+      
       return (
         <React.Fragment>
           <h1>My Company Inventory</h1>
           <h3>Showing all available products</h3>
           <hr />
-          <ProductTable productList={products} />
+          <ProductTable productList={products} deleteProduct={this.deleteProduct}/>
           <h3>Add a new product to the inventory</h3>
           <hr />
           <ProductAdd createProduct={this.createProduct} />

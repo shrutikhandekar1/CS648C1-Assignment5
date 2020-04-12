@@ -15,7 +15,6 @@ export default function Contents() {
       <Route path="/products" component={ProductList} />
       <Route path="/edit/:id" component={ProductEdit} />
       <Route path="/image/:id" component={ProductImage} />
-      <Route path="/report" component={ProductReport} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -13,6 +13,7 @@
  */
 
 db.products.remove({});
+db.deleted_products.remove({});
 
 const productsDB = [
   {
@@ -44,3 +45,6 @@ db.products.createIndex({ productName: 1 });
 db.products.createIndex({ price: 1 });
 db.products.createIndex({ category: 1 });
 db.products.createIndex({ image: 1 });
+db.products.createIndex({ created: 1 });
+
+db.deleted_products.createIndex({ id: 1 }, { unique: true });

@@ -6,6 +6,22 @@ type Product {
     category: Inventory!
     image: String!
 }
+
+input ProductInput{
+    productName: String!
+    price: Float!
+    category: Inventory!
+    image: String!
+
+}
+
+input ProductUpdateInputs {
+    productName: String
+    price: Float
+    category: Inventory
+    image: String
+}
+
 enum Inventory {
     SHIRTS
     JEANS
@@ -19,12 +35,7 @@ type Query {
 }
 type Mutation {
     productAdd(product: ProductInput!): Product!
+    productUpdate(id: Int!, changes: ProductUpdateInputs!): Product!
+    productDelete(id: Int!): Boolean!
 }
 
-input ProductInput{
-    productName: String!
-    price: Float!
-    category: Inventory!
-    image: String!
-
-}

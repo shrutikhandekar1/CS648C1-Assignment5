@@ -1,8 +1,9 @@
   
 import React from 'react';
 import { Link } from 'react-router-dom';
-
 import graphQLFetch from './graphQLFetch.js';
+import NumInput from './NumInput.jsx';
+import TextInput from './TextInput.jsx';
 
 export default class ProductEdit extends React.Component {
   constructor() {
@@ -28,17 +29,37 @@ export default class ProductEdit extends React.Component {
     }
   }
 
-  onChange(event) {
-    const { name, value } = event.target;
+  onChange(event, naturalValue) {
+    const { name, value: textValue } = event.target;
+    const value = naturalValue === undefined ? textValue : naturalValue;
     this.setState(prevState => ({
       product: { ...prevState.product, [name]: value },
     }));
   }
   
-  handleSubmit(e) {
+  async handleSubmit(e) {
     e.preventDefault();
-    const { product } = this.state;
-    console.log(product); // eslint-disable-line no-console
+    const { product, invalidFields } = this.state;
+    if (Object.keys(invalidFields).length !== 0) return;
+
+    const query = `mutation productUpdate(
+      $id: Int!
+      $changes: ProductUpdateInputs!
+    ) {
+      productUpdate(
+        id: $id
+        changes: $changes
+      ) {
+        id productName price category image
+      }
+    }`;
+
+    const { id, created, ...changes } = product;
+    const data = await graphQLFetch(query, { changes, id });
+    if (data) {
+      this.setState({ product: data.productUpdate });
+      alert('Updated product successfully'); // eslint-disable-line no-alert
+    }
   }
   
   async loadData() {
@@ -49,25 +70,19 @@ export default class ProductEdit extends React.Component {
     }`;
     
     const id = parseInt(this.props.match.params.id);
-    // const { match: { params: { id } } } = this.props;
-    
-
     const data = await graphQLFetch(query, { id });
     
-    if (data) {
-      const { product } = data;
-      product.productName = product.productName ? product.productName.toString() : '';
-      product.price = product.price != null ? product.price.toString() : '';
-      product.category = product.category != null ? product.category.toString() : '';
-      product.image = product.image != null ? product.image.toString() : '';
-      this.setState({ product });
-    } else {
-      this.setState({ product: {} });
-    }
+     if (data) {
+       const { product } = data;
+       product.category = product.category != null ? product.category.toString() : '';
+       product.image = product.image != null ? product.image.toString() : '';
+     }
+    this.setState({ product: data ? data.product : {}, invalidFields: {} });
   }
 
   render() {
     const { product: { id } } = this.state;
+    console.log(this.state);
     var { match: { params: { id: propsId } } } = this.props;
 
     if (id == null) {
@@ -78,6 +93,7 @@ export default class ProductEdit extends React.Component {
     }
 
     const { product: { productName, price, category, image } } = this.state;
+    
     return (
       <form onSubmit={this.handleSubmit}>
         <h3>{`Editing product: ${id}`}</h3>
@@ -85,15 +101,23 @@ export default class ProductEdit extends React.Component {
           <tbody>
             <tr>
               <td>ProductName:</td>
-              <td>{productName.toString()}</td>
+              <td>
+                <TextInput
+                    name="productName"
+                    value={productName}
+                    onChange={this.onChange}
+                    key={id}
+                  />
+                </td>
             </tr>
             <tr>
               <td>Price:</td>
               <td>
-                <input
+                <NumInput
                     name="price"
                     value={price}
                     onChange={this.onChange}
+                    key={id}
                   />
               </td>
             </tr>
@@ -125,9 +149,6 @@ export default class ProductEdit extends React.Component {
             </tr>
           </tbody>
         </table>
-        <Link to={`/edit/${id - 1}`}>Prev</Link>
-        {' | '}
-        <Link to={`/edit/${id + 1}`}>Next</Link>
       </form>
     );
   }

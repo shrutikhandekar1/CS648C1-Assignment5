@@ -6,10 +6,6 @@ function NavBar() {
   return (
     <nav>
       <a href="/">Home</a>
-      {' | '}
-      <a href="/#/issues">Product List</a>
-      {' | '}
-      <a href="/#/report">Add Product</a>
     </nav>
   );
 }
